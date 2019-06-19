@@ -51,7 +51,7 @@ class Formula extends React.PureComponent {
         const {[key]: deleted, ...scope} = this.state.scope;
         this.setState({scope});
 
-    };
+    }; 
 
     handleAddScopeValue = e => {
         this.setState(state => ({
