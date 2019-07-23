@@ -3,6 +3,9 @@
   .she-left {
     display: flex;
     flex-direction: column;
+    width: 400px;
+    align-items: center;
+    padding-top: 44px;
     .she-help {
 
       display: flex;
@@ -11,6 +14,20 @@
 }
 
 .she-scope-var {
+  .she-scope-var-hotkey {
+    input {
+      width: 30px;
+    }
+  }
   .she-scope-var-value {
   }
+}
+
+.canvas {
+  border: 1px solid red;
+  display: flex;
+}
+
+#she-video {
+  display: none;
 }
