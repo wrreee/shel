@@ -58,6 +58,8 @@ export class Capture {
         this.f = f || (x => x);
         this.stack = new PixelsStack(w);
 
+        this.rate = 1;
+
         new P5(sketch => {
             this.sketch = sketch;
             sketch.setup = () => {
@@ -80,11 +82,15 @@ export class Capture {
                 this.capture.parent(videoElId);
                 this.capture.size(w, h);
 
-                //sketch.frameRate(15);
+                sketch.frameRate(60);
             };
 
 
             sketch.draw = () => {
+
+                // sketch.frameRate(this.rate);
+                // this.rate++;
+                // if (this.rate > 60) this.rate = 5;
 
                 // if (!this.on) return;
 
@@ -97,7 +103,7 @@ export class Capture {
                 // console.log(this.capture.pixels, sketch.pixels);
 
                 //положили в кубический кадр изображение с канваса
-                this.stack.push([...this.capture.pixels]);
+                this.stack.push(this.capture.pixels);
 
                 //изменение пикселей на канвасе
 
