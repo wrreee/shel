@@ -30,3 +30,33 @@ export const randomZ = () => {
     return s;
 
 };
+
+
+const quadNumberFormat =
+    (arr) =>
+        (string, offset) => string
+            .split(((0 + offset) % 4).toString()).join(arr[0])
+            .split(((1 + offset) % 4).toString()).join(arr[1])
+            .split(((2 + offset) % 4).toString()).join(arr[2])
+            .split(((3 + offset) % 4).toString()).join(arr[3]);
+
+// let offset = 0;
+export const dateZs = () => {
+
+    const date = new Date();
+
+    let f = '32_9';
+    //
+    // if (date.getDay() === 4) {
+    //     f = 'szSZ';
+    // } else if (date.getDay() === 3) {
+    //     f = 'rs2d';
+    // } else {
+    //     f = 'szSZ';
+    // }
+
+    // offset = (offset + 1) % 4;
+
+    return quadNumberFormat(f)(date.getTime().toString(4), 0);
+
+};

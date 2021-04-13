@@ -3,16 +3,12 @@ import {byClassName, byId, fract, stylier} from "../../comon/util";
 export const main = fract(require('./main.html'), (props, root) => {
     const container = byId('bajan');
     const elems = byClassName(container)('br', true).getElementsByTagName('div');
+
     stylier(container)({height: 100 * elems.length + 'vh'});
 
-
-    console.log(window.innerHeight, window.innerHeight * 4);
     document.addEventListener('scroll', (e) => {
-        // console.log(window.scrollY);
 
         const curE = Math.trunc(window.scrollY / window.innerHeight);
-
-        console.log(curE);
 
         for (let i = 0; i < elems.length; i++) {
             if (i < curE) {

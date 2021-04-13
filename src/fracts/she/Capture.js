@@ -1,6 +1,6 @@
 import {get, PixelsStack, set} from "../../comon/pixels";
 import * as P5 from "p5";
-import {EdgeMode, randomZ, SlitMode} from "./components/const";
+import { dateZs, EdgeMode, randomZ, SlitMode } from "./components/const";
 import {throttled} from "./utils";
 
 export class Capture {
@@ -50,7 +50,7 @@ export class Capture {
 
 
     constructor(props) {
-        const {canvasElId, videoElId, w, h, rate, f} = props;
+        const {canvasElId, videoElId, w, h, f} = props;
 
         this.w = w;
         this.h = h;
@@ -58,10 +58,24 @@ export class Capture {
         this.f = f || (x => x);
         this.stack = new PixelsStack(w);
 
-        this.rate = 1;
-
         new P5(sketch => {
             this.sketch = sketch;
+            this.capture = sketch.createCapture({
+                video: {
+                    mandatory: {
+                        minWidth: w,
+                        minHeight: h
+                    },
+                    optional: [{
+                        maxFrameRate: 30
+                    }]
+                },
+                audio: false
+            });
+
+            this.capture.parent(videoElId);
+            this.capture.size(w, h);
+
             sketch.setup = () => {
                 sketch.pixelDensity(1);
                 this.canvas = sketch.createCanvas(w, h);
@@ -82,36 +96,21 @@ export class Capture {
                 this.capture.parent(videoElId);
                 this.capture.size(w, h);
 
-                sketch.frameRate(60);
+                sketch.frameRate(30);
             };
 
 
             sketch.draw = () => {
 
-                // sketch.frameRate(this.rate);
-                // this.rate++;
-                // if (this.rate > 60) this.rate = 5;
+                let time = performance.now();
 
-                // if (!this.on) return;
-
-                //загрузка исходного изображения с камеры на канвас
-                //sketch.image(this.capture, 0, 0, w, h);
                 sketch.loadPixels();
 
                 this.capture.loadPixels();
-                //
-                // console.log(this.capture.pixels, sketch.pixels);
 
-                //положили в кубический кадр изображение с канваса
                 this.stack.push(this.capture.pixels);
 
-                //изменение пикселей на канвасе
-
-                // const newPixels = this.process(this.stack.array, this.f);
-                //  for (let i = 0; i < sketch.pixels.length; i++)
-                //      sketch.pixels[i] = newPixels[i];
-
-                const pixelsStack = this.stack.array;
+                let pixelsStack = this.stack.array;
 
                 for (let x = 0; x < this.w; x++) {
                     for (let y = 0; y < this.h; y++) {
@@ -125,15 +124,10 @@ export class Capture {
                     }
                 }
 
-                // for (let x = 0; x < this.w; x++) {
-                //     for (let y = 0; y < this.h; y++) {
-                //         const p = get(this.stack[Math.round(this.f(x, y, this.stack.length))], this.w, 4, x, y);
-                //         set(sketch.pixels, this.w, 4, x, y, p);
-                //     }
-                // }
+                pixelsStack = null;
+                //
+                // console.log(performance.now() - time);
 
-
-                //применение изменений
                 sketch.updatePixels();
             }
         });
@@ -175,6 +169,6 @@ export class Capture {
 
 
     save = () => {
-        this.sketch.save(this.canvas, randomZ())
+        this.sketch.save(this.canvas, dateZs());
     };
 }

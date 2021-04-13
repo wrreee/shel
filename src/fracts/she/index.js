@@ -20,8 +20,10 @@ import {Capture} from "./capture";
  * морфинг в пресет пока нажата кнопка, потом возвращение в начальное состояние (моментальное или морфинговое)
  * изменение размера
  */
-const W = 640;
-const H = 480;
+// const W = 640;
+// const H = 480;
+const W = 240;
+const H = 180;
 
 export const she = fract(require('./she.html'), (props, root) => {
 
