@@ -1,33 +1,33 @@
-.she-container {
+.container {
   display: flex;
-  .she-left {
+  .left {
     display: flex;
     flex-direction: column;
     width: 400px;
     align-items: center;
     padding-top: 44px;
-    .she-help {
+    .help {
 
       display: flex;
     }
   }
 }
 
-.she-scope-var {
-  .she-scope-var-hotkey {
+.scope-var {
+  .scope-var-hotkey {
     input {
       width: 30px;
     }
   }
-  .she-scope-var-value {
+  .scope-var-value {
   }
 }
 
 .canvas {
-  border: 1px solid red;
+  //border: 1px solid red;
   display: flex;
 }
 
-#she-video {
+#video {
   display: none;
 }

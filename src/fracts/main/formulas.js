@@ -1,4 +1,4 @@
-import {CutShape} from "./components/CutShape";
+import {CutShape} from "./Controls/components/CutShape";
 
 export const ParamType = {
     CutShapeArray: 'cutshapearray'
@@ -14,17 +14,17 @@ export const Formulas = (W, H) => ({
         scope: {
             array: {
                 type: ParamType.CutShapeArray,
-                value: (Array.from(Array(W))).map((o, i) => i * H / W),
+                value: (Array.from(Array(W))).map((_, i) => i * H / W),
                 w: W,
                 h: H
             }
         }
     },
-    yy: {
-        text: 'y',
-        f: () => (x, y) => y,
-        scope: {}
-    },
+    // yy: {
+    //     text: 'y',
+    //     f: () => (x, y) => y,
+    //     scope: {}
+    // },
     sq: {
         text: 'sin(x / a) * cos(y / b) * c + f',
         f: ({a, b, c, h}) => (x, y) => (Math.sin(x / a) * Math.cos(y / b) * c + h),

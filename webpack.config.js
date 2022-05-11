@@ -2,10 +2,58 @@ const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const {resolve} = require("path");
 
 module.exports = {
+    entry: './src/index.js',
+    resolve: {
+        extensions: ['.js'],
+        symlinks: true,
+    },
+    output: {
+        filename: 'main.js',
+        path: resolve(__dirname, 'dist')
+    },
+    module: {
+        rules: [{
+            test: /\.(js)$/,
+            exclude: [/node_modules/],
+            loader: "babel-loader"
+        }, {
+            test: /\.ts$/,
+            use: 'ts-loader',
+            exclude: /node_modules/
+        }, {
+            test: /\.s[ac]ss$/i,
+            use: [
+                // Creates `style` nodes from JS strings
+                "style-loader",
+                // Translates CSS into CommonJS
+                "css-loader",
+                // Compiles Sass to CSS
+                "sass-loader",
+            ],
+        }, {
+            test: /\.html$/,
+            use: {loader: 'html-loader'}
+        }]
+    },
+    plugins: [
+        new HTMLWebpackPlugin({
+            template: __dirname + '/src/index.html',
+            filename: 'index.html',
+            inject: 'body'
+        }),
+    ],
+};
+
+const a = {
     devtool: 'source-map',
     entry: './src/index.js',
+    resolve: {
+        extensions: ['.js'],
+        symlinks: true,
+    },
     output: {
         filename: 'main.js',
         path: path.resolve(__dirname, 'dist')
@@ -34,7 +82,7 @@ module.exports = {
             })
         }, {
             test: /\.paper.js$/,
-            loader: ["babel-loader", "paper-loader"]
+            use: ["babel-loader", "paper-loader"]
         }]
     },
     plugins: [
@@ -45,9 +93,5 @@ module.exports = {
         }),
         new ExtractTextPlugin('style.css')
     ],
-    devServer: {
-        headers: {'Access-Control-Allow-Origin': '*'},
-        https: false,
-        disableHostCheck: true
-    },
+    devServer: {},
 };

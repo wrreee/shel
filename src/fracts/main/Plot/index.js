@@ -1,6 +1,6 @@
 import * as vis from "vis";
 
-export class Graph {
+export class Plot {
     w;
     h;
     axisStep = 10;
@@ -29,7 +29,7 @@ export class Graph {
         this.w = w;
         this.h = h;
 
-        const data = Graph.createDataByF(w, h, f, this.axisStep);
+        const data = Plot.createDataByF(w, h, f, this.axisStep);
 
         const options = {
             width: w / 2 + 'px',
@@ -56,7 +56,7 @@ export class Graph {
     }
 
     setData = f => {
-        const data = Graph.createDataByF(this.w, this.h, f, this.axisStep);
+        const data = Plot.createDataByF(this.w, this.h, f, this.axisStep);
         this.graph3d.setData(data);
     }
 }

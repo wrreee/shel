@@ -1,6 +1,5 @@
-import {main} from './fracts/main/main.js';
-import {she} from './fracts/she';
+import {main} from './fracts/main';
 import './styles.scss';
 import {byId} from "./comon/util";
 
-she(byId('main'));
+main(byId('main'));

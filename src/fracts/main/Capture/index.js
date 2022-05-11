@@ -1,7 +1,8 @@
-import {get, PixelsStack, set} from "../../comon/pixels";
+import {get, PixelsStack, set} from "./PixelsStack";
 import * as P5 from "p5";
-import { dateZs, EdgeMode, randomZ, SlitMode } from "./components/const";
-import {throttled} from "./utils";
+import {EdgeMode, SlitMode} from "../Controls/const";
+import {throttled} from "../../../comon/util";
+import {dateZs} from "../Controls/utils";
 
 export class Capture {
 
@@ -125,8 +126,6 @@ export class Capture {
                 }
 
                 pixelsStack = null;
-                //
-                // console.log(performance.now() - time);
 
                 sketch.updatePixels();
             }

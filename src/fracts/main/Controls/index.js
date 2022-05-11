@@ -1,13 +1,13 @@
 import React from "react";
 import _omit from "lodash/omit";
-import {Select} from "./Select";
+import {Select} from "./components/Select";
 import {EdgeMode, LS_FIELD, SlitMode} from "./const";
 import {Formulas, ParamTypeComponent} from "../formulas";
-import {throttled} from "../utils";
 import {GlobalHotKeys} from "react-hotkeys";
-import {StackType} from "../../../comon/pixels";
+import {StackType} from "../Capture/PixelsStack";
+import {throttled} from "../../../comon/util";
 
-export class FControl extends React.PureComponent {
+export class Controls extends React.PureComponent {
 
     formulas;
 
@@ -20,11 +20,7 @@ export class FControl extends React.PureComponent {
 
         const cF = Object.keys(this.formulas)[0];
 
-        const stateFromLs = this.loadFromLs();
-
-
-        // this.state = stateFromLs || {
-        this.state =  {
+        this.state = {
             hotKeys: {},
             handlers: {},
             keys: {},
@@ -41,11 +37,6 @@ export class FControl extends React.PureComponent {
 
     saveToLs = () => {
         localStorage.setItem(LS_FIELD, JSON.stringify(this.state));
-    };
-
-    loadFromLs = () => {
-        const s = localStorage.getItem(LS_FIELD);
-        return s && JSON.parse(s);
     };
 
     handleSlitModeChange = slitMode => this.setState({slitMode}, () => {
@@ -65,7 +56,7 @@ export class FControl extends React.PureComponent {
     createMouseHandler = key => {
         let startE = null;
         let startValue = this.state.scope[key].value;
-        //console.log(window.innerWidth);
+
         return throttled(30, e => {
             if (!startE) {
                 startE = e;
@@ -78,8 +69,6 @@ export class FControl extends React.PureComponent {
             if (value > scope.max) value = scope.max;
             if (value < scope.min) value = scope.min;
 
-            // console.log(value, startValue);
-
             this.setState(state => ({
                 scope: {
                     ...state.scope,
@@ -89,36 +78,34 @@ export class FControl extends React.PureComponent {
                     }
                 }
             }), this.update);
-
-            //console.log(key, e.x - startE.x);
         })
     };
 
+    i = 0;
     keydownHandler = e => {
-        const code = e.key.charCodeAt(0);
-        //console.log(e.key, e.key.charCodeAt(0), e.keyCode);
+        const code = e.key;
 
         if (!this.state.keys[code]) {
-            //const handler = this.createMouseHandler(code);
-            //document.addEventListener("mousemove", handler);
 
-            //console.log(this.state.hotKeys, code);
             const handledKeys = Object.keys(this.state.hotKeys).filter(key => this.state.hotKeys[key] === code);
-            //console.log(handledKeys);
-            handledKeys.forEach(key => {
-                const handler = this.createMouseHandler(key);
-                document.addEventListener("mousemove", handler);
-                this.setState(state => ({handlers: {...state.handlers, [key]: handler}}));
-            });
-            this.setState(state => ({keys: {...state.keys, [code]: true}}));
+
+            this.setState(state => ({
+                keys: {...state.keys, [code]: true},
+                handlers: {
+                    ...state.handlers,
+                    ...(handledKeys.reduce((res, key) => {
+                        const handler = this.createMouseHandler(key);
+                        document.addEventListener("mousemove", handler);
+                        res[key] = handler;
+                        return res;
+                    }, {}))
+                }
+            }));
         }
     };
 
     keyupHandler = (e) => {
-        const code = e.key.charCodeAt(0);
-        //console.log(e.keyCode);
-        // const handler = this.state.keys[code];
-        // document.removeEventListener("mousemove", handler);
+        const code = e.key;
 
         const handledKeys = Object.keys(this.state.hotKeys).filter(key => this.state.hotKeys[key] === code);
         handledKeys.forEach(this.removeHandler);
@@ -136,23 +123,47 @@ export class FControl extends React.PureComponent {
         document.addEventListener("keyup", this.keyupHandler);
     }
 
-    handleChangeHotKeyValue = key => e => {
+    handleChangeHotKeyValue = paramName => e => {
+        e.persist()
 
-        const code = e.key.charCodeAt(0);
+        const code = e.nativeEvent.code
+        const key = e.key;
 
-        if (code === 120) return this.setState(state => ({
-            hotKeys: _omit(state.hotKeys, key)
-        }), () =>
-            this.removeHandler(key));
+        if (e.key === "Backspace") {
+            return this.setState(state => ({
+                hotKeys: _omit(state.hotKeys, paramName)
+            }), () => {
+                this.removeHandler(paramName)
+            });
+        }
 
-        if ([97, 115, 100, 113, 119, 101].indexOf(code) === -1) return;
+        if (
+            !e.nativeEvent.altKey && !e.nativeEvent.ctrlKey && [
+                'Key',
+                'ShiftLeft',
+                'ShiftRight',
+                'Digit',
+                'BracketRight',
+                'BracketLeft',
+                'Backslash',
+                'IntlBackslash',
+                'Slash',
+                'Minus',
+                'Equal',
+                'Quote',
+                'Backquote',
+                'Semicolon'
+            ].every((code) => e.nativeEvent.code !== code)
+        ) {
+            this.setState(state => ({
+                hotKeys: {
+                    ...state.hotKeys,
+                    [paramName]: key
+                }
+            }));
+        }
 
-        this.setState(state => ({
-            hotKeys: {
-                ...state.hotKeys,
-                [key]: code
-            }
-        }));
+
     };
 
     handleChangeScopeValue = e => {
@@ -293,20 +304,21 @@ export class FControl extends React.PureComponent {
                     {Object.keys(this.state.scope).map(key => {
                         const Component = ParamTypeComponent[this.state.scope[key].type];
                         return Component ? (
-                            <tr key={key} className={'she-scope-var'}>
+                            <tr key={key} className={'scope-var'}>
                                 <td colSpan="6">
                                     <Component
                                         w={w}
                                         h={h}
                                         name={key}
                                         scope={this.state.scope[key]}
-                                        onChange={this.handleChangeScopeValueCustom}/>
+                                        onChange={this.handleChangeScopeValueCustom}
+                                    />
                                 </td>
                             </tr>
                         ) : (
-                            <tr key={key} className={'she-scope-var'}>
-                                <td className={'she-scope-var-key'}>{key}</td>
-                                <td className={'she-scope-var-range'}>
+                            <tr key={key} className={'scope-var'}>
+                                <td className={'scope-var-key'}>{key}</td>
+                                <td className={'scope-var-range'}>
                                     <input
                                         type="range"
                                         name={key}
@@ -319,15 +331,15 @@ export class FControl extends React.PureComponent {
                                     <button onClick={this.handleDecScopeValue(key)}>-</button>
                                     <button onClick={this.handleIncScopeValue(key)}>+</button>
                                 </td>
-                                <td className={'she-scope-var-hotkey'}>
+                                <td className={'scope-var-hotkey'}>
                                     <input
                                         type="text"
-                                        value={String.fromCharCode(this.state.hotKeys[key])}
+                                        value={this.state.hotKeys[key]}
                                         onKeyDown={this.handleChangeHotKeyValue(key)}/>
                                 </td>
-                                <td className={'she-scope-var-value'}>{this.state.scope[key].value}</td>
-                                <td className={'she-scope-var-value'}>[{this.state.scope[key].min};</td>
-                                <td className={'she-scope-var-value'}>{this.state.scope[key].max}]</td>
+                                <td className={'scope-var-value'}>{this.state.scope[key].value}</td>
+                                <td className={'scope-var-value'}>[{this.state.scope[key].min};</td>
+                                <td className={'scope-var-value'}>{this.state.scope[key].max}]</td>
                             </tr>
                         )
                     })}

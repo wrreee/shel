@@ -9,7 +9,7 @@ export const renderDOM = element => text => {
 };
 
 export const fract = (html, game) =>
-    (element, props) => renderDOM(element)(html) && game(props, element);
+    (element, props) => renderDOM(element)(html) && game?.(props, element);
 
 export const byClassName = (elem = document) => (name, first) =>
     first ? elem.getElementsByClassName(name)[0] : elem.getElementsByClassName(name);
@@ -33,3 +33,15 @@ export const addClass = element => name => {
     const arr = element.className.split(" ");
     arr.indexOf(name) === -1 && (element.className += " " + name);
 };
+
+export function throttled(delay, fn) {
+    let lastCall = 0;
+    return function (...args) {
+        const now = (new Date).getTime();
+        if (now - lastCall < delay) {
+            return;
+        }
+        lastCall = now;
+        return fn(...args);
+    }
+}

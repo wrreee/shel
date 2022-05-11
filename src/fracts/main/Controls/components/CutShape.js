@@ -8,7 +8,6 @@ const fByPoints = (x1, y1, x2, y2) => {
     return x => k * x + b;
 };
 
-
 export class CutShape extends React.PureComponent {
 
     componentDidMount() {
@@ -21,9 +20,9 @@ export class CutShape extends React.PureComponent {
             var x = (i / 4) % img.width;
             var y = Math.floor((i / 4) / img.width);
             if (value[x] > y) {
-                img.data[i] = 255;
-                img.data[i + 1] = 255;
-                img.data[i + 2] = 255;
+                img.data[i] = 230;
+                img.data[i + 1] = 230;
+                img.data[i + 2] = 230;
                 img.data[i + 3] = 255;
             } else {
                 img.data[i] = 0;
@@ -48,9 +47,9 @@ export class CutShape extends React.PureComponent {
                 var x = (i / 4) % img.width;
                 var y = Math.floor((i / 4) / img.width);
                 if (value[x] > y) {
-                    img.data[i] = 255;
-                    img.data[i + 1] = 255;
-                    img.data[i + 2] = 255;
+                    img.data[i] = 230;
+                    img.data[i + 1] = 230;
+                    img.data[i + 2] = 230;
                     img.data[i + 3] = 255;
                 } else {
                     img.data[i] = 0;
