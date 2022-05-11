@@ -2,7 +2,7 @@ import {get, PixelsStack, set} from "./PixelsStack";
 import * as P5 from "p5";
 import {EdgeMode, SlitMode} from "../Controls/const";
 import {throttled} from "../../../comon/util";
-import {dateZs} from "../Controls/utils";
+import {getDateString} from "../Controls/utils";
 
 export class Capture {
 
@@ -168,6 +168,6 @@ export class Capture {
 
 
     save = () => {
-        this.sketch.save(this.canvas, dateZs());
+        this.sketch.save(this.canvas, getDateString());
     };
 }
