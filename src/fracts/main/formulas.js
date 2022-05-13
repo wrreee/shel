@@ -13,8 +13,8 @@ export const Formulas = (W, H) => ({
         f: ({array}) => x => array[x],
         scope: {
             array: {
-                type: ParamType.CutShapeArray,
                 value: (Array.from(Array(W))).map((_, i) => i * H / W),
+                type: ParamType.CutShapeArray,
                 w: W,
                 h: H
             }
@@ -27,13 +27,6 @@ export const Formulas = (W, H) => ({
     // },
     sq: {
         text: 'sin(x / a) * cos(y / b) * c + f',
-        f: ({a, b, c, h}) => (x, y) => (Math.sin(x / a) * Math.cos(y / b) * c + h),
-        presets: {
-            p1: {a: 3, b: 64, c: -77, h: 126},
-            p2: {a: 11, b: 11, c: 140, h: 150},
-            p3: {a: 14, b: 214, c: -135, h: 135},
-            p4: {a: 54, b: 66, c: 159, h: 159},
-        },
         scope: {
             a: {
                 value: 25,
@@ -55,6 +48,13 @@ export const Formulas = (W, H) => ({
                 min: -H,
                 max: H
             }
+        },
+        f: ({a, b, c, h}) => (x, y) => (Math.sin(x / a) * Math.cos(y / b) * c + h),
+        presets: {
+            p1: {a: 3, b: 64, c: -77, h: 126},
+            p2: {a: 11, b: 11, c: 140, h: 150},
+            p3: {a: 14, b: 214, c: -135, h: 135},
+            p4: {a: 54, b: 66, c: 159, h: 159},
         }
     },
     sis2: {
@@ -142,5 +142,63 @@ export const Formulas = (W, H) => ({
                 step: 5
             }
         }
+    },
+    pyro: {
+        text: "1-abs(x+y)-abs(y-x)",
+        f: ({a, b, c}) => (x, y) =>
+            c-a*Math.abs((x-W/2)+(y-H/2))-b*Math.abs((y-H/2)-(x-W/2)),
+        scope: {
+            a: {
+                value: 1,
+                min: -500,
+                max: 500,
+                step: 0.1
+            },
+            b: {
+                value: 1,
+                min: -500,
+                max: 500,
+                step: 0.1
+            },
+            c: {
+                value: 1,
+                min: -1000,
+                max: 1000,
+                step: 0.1
+            }
+            // },
+            // m: {
+            //     value: 1,
+            //     min: -1000,
+            //     max: 1000,
+            //     step: 1
+            // }
+        }
+    },
+    sas1: {
+        text: "20/(ℯ^((x*0.02)^(2) (y*5)^(2)))",
+        f: ({a, b, c}) => (x, y) =>
+            c/(Math.exp(Math.pow((x-W/2)/a,2) * Math.pow((y-H/2)/b, 2))),
+        scope: {
+            a: {
+                value: 1,
+                min: -500,
+                max: 500,
+                step: 0.1
+            },
+            b: {
+                value: 1,
+                min: -500,
+                max: 500,
+                step: 0.1
+            },
+            c: {
+                value: 1,
+                min: -1000,
+                max: 1000,
+                step: 0.1
+            }
+        }
     }
+
 });
