@@ -147,6 +147,10 @@ export const Formulas = (W, H) => ({
         text: "1-abs(x+y)-abs(y-x)",
         f: ({a, b, c}) => (x, y) =>
             c-a*Math.abs((x-W/2)+(y-H/2))-b*Math.abs((y-H/2)-(x-W/2)),
+        presets: {
+            squares: {a: -12.9, b: -13.1, c: 111.4},
+            aid: {a: 11.5, b: -10.5, c: 111.4}
+        },
         scope: {
             a: {
                 value: 1,
@@ -166,19 +170,16 @@ export const Formulas = (W, H) => ({
                 max: 1000,
                 step: 0.1
             }
-            // },
-            // m: {
-            //     value: 1,
-            //     min: -1000,
-            //     max: 1000,
-            //     step: 1
-            // }
         }
     },
     sas1: {
         text: "20/(ℯ^((x*0.02)^(2) (y*5)^(2)))",
         f: ({a, b, c}) => (x, y) =>
             c/(Math.exp(Math.pow((x-W/2)/a,2) * Math.pow((y-H/2)/b, 2))),
+        presets: {
+            t1: {a: -12.9, b: 392.9, c: 111.4},
+            t2: {a: -42.1, b: -54.2, c: 1000}
+        },
         scope: {
             a: {
                 value: 1,
