@@ -334,10 +334,14 @@ export class Controls extends React.PureComponent {
                                 <td className={'scope-var-hotkey'}>
                                     <input
                                         type="text"
+                                        name={key}
+                                        value={this.state.scope[key].value}
+                                        onChange={this.handleChangeScopeValue}/>
+                                    <input
+                                        type="text"
                                         value={this.state.hotKeys[key]}
                                         onKeyDown={this.handleChangeHotKeyValue(key)}/>
                                 </td>
-                                <td className={'scope-var-value'}>{this.state.scope[key].value}</td>
                                 <td className={'scope-var-value'}>[{this.state.scope[key].min};</td>
                                 <td className={'scope-var-value'}>{this.state.scope[key].max}]</td>
                             </tr>
