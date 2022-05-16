@@ -187,19 +187,19 @@ export const Formulas = (W, H) => ({
         }
     },
     sas1: {
-        text: "c / (ℯ ^ ((x / a) ^ 2 (y / b) ^ 2))",
-        f: ({a, b, c, d, e}) => (x, y) =>
+        text: "c / (ℯ ^ (d * (x / a) ^ 2 (y / b) ^ 2))",
+        f: ({a, b, c, d}) => (x, y) =>
             c / (Math.exp(d * Math.pow((x - W / 2) / a, 2) * Math.pow((y - H / 2) / b, 2))),
         presets: {
-            t1: {a: -12.9, b: 392.9, c: 111.4},
-            t2: {a: -42.1, b: -54.2, c: 1000},
-            t23: {a: -42.1, b: -54.2, c: 1000, d: 2, e: 2}
+            t1: {a: 12.9, b: 392.9, c: 111.4, d: 2},
+            t2: {a: 42.1, b: -54.2, c: 1000, d: 2},
+            t3: {a: 36, b: 93, c: 111.1, d: -100}
         },
         scope: {
             a: {
                 value: 36,
-                min: -H,
-                max: H,
+                min: 0,
+                max: 1000,
                 step: 0.1
             },
             b: {
@@ -215,12 +215,6 @@ export const Formulas = (W, H) => ({
                 step: 0.1
             },
             d: {
-                value: 2,
-                min: -100,
-                max: 100,
-                step: 0.1
-            },
-            e: {
                 value: 2,
                 min: -100,
                 max: 100,
